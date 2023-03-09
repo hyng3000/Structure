@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">structure</string>
+    <string name ="back_button">Back Button</string>
+    <string name ="build_workout_title">Build your new Workout!</string>
+    <string name ="build_routine_title">Build your Routine!</string>
+    <string name ="my_routines">My Routines </string>
+    <string name ="Reps">Reps</string>
+    <string name ="kg">kg.</string>
+    <string name ="current_workout">Current Workout: </string>
+    <string name="empty_movement_history">Your workout history is currently empty.</string>
+    <string name="weight">weight</string>
+    <string name="reps">reps</string>
+    <string name="sets">Sets: </string>
+
+</resources>
