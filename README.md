@@ -2,7 +2,7 @@
 ## An app to track your workouts 💪
 
 Structure is an android app written in Kotlin, utilising Jetpack Compose. You can build, your own workouts and track your progress while you get stronger.
-This app uses Room to store data in an SQL database and uses Kotlin Coroutines and Flows to retrieve data asynchronously. This is the minimum viable product for this SAS idea and has many features yet to come.
+This app uses Room to store data in an SQL database and Kotlin Coroutines and Flows to retrieve data asynchronously. This app demonstrates MVVM archetecture and Android's reccommended Repository patteern.  This is the minimum viable product for this SAS idea and has many features yet to come.
 Such as: 
 
   -> a timer function
