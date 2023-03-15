@@ -8,53 +8,9 @@ Structure is an android app written in Kotlin, utilising Jetpack Compose. You ca
   -> functionality to edit routines mid workout
 
   -> data analysis of historical workouts
-
- 
-
-  <img
-  src="https://user-images.githubusercontent.com/53566395/224057021-1a34f0b2-9125-4e74-b548-a16b8971e3b4.png"
-  width="200" 
-  height="425"
-  align="left">
   
-  <img
-  src="https://user-images.githubusercontent.com/53566395/224057097-10439f11-af99-4ac2-a6a7-e33ce4bad9a5.png"
-  width="200" 
-  height="425"
-  align="middle">
+  Some short screen grabs of the basic features: 
 
-  <img
-  src="https://user-images.githubusercontent.com/53566395/224057780-93ae98f8-01cc-4414-a7a3-47b8ddee49b4.png"
-  width="200" 
-  height="425"
-  align="left">
+[HomeAndWorkoutScreen.webm](https://user-images.githubusercontent.com/53566395/225334580-c506e9e6-658d-401e-b71e-4cd64f7524c0.webm)
 
-  <img
-  src="https://user-images.githubusercontent.com/53566395/224057884-2fd8009c-795b-418e-8a87-8fcd512f05eb.png"
-  width="200" 
-  height="425"
-  align="middle">
-  
-  <img
-  src="https://user-images.githubusercontent.com/53566395/224058977-586e7335-8114-4f32-a1ce-409d2c6597b1.png"
-  width="200" 
-  height="425"
-  align="left">
-  
-  <img
-  src="https://user-images.githubusercontent.com/53566395/224059054-d4748d8b-ba9d-4e08-9d5a-0eaa7400e7cd.png"
-  width="200" 
-  height="425"
-  align="middle">
-
-  <img
-  src="https://user-images.githubusercontent.com/53566395/224059171-1e137757-5e29-4300-8755-cd4c9236dfcb.png"
-  width="200" 
-  height="425"
-  align="left">
-
-  <img
-  src="https://user-images.githubusercontent.com/53566395/224061698-91a81b3e-409b-4a1e-81ee-082f67dd65c0.png"
-  width="200" 
-  height="425"
-  align="middle">
+[newWorkoutDemo.webm](https://user-images.githubusercontent.com/53566395/225334616-2b303089-ff87-4f90-992f-692a79e3d767.webm)
