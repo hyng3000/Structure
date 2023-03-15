@@ -9,8 +9,12 @@ Structure is an android app written in Kotlin, utilising Jetpack Compose. You ca
 
   -> data analysis of historical workouts
   
-  Some short screen grabs of the basic features: 
+## Some short screen grabs of the basic features: 
+  
+## Enter Data for your workout, and view previous entries.
 
 [HomeAndWorkoutScreen.webm](https://user-images.githubusercontent.com/53566395/225334580-c506e9e6-658d-401e-b71e-4cd64f7524c0.webm)
+
+## Build a new routine and edit existing routines.
 
 [newWorkoutDemo.webm](https://user-images.githubusercontent.com/53566395/225334616-2b303089-ff87-4f90-992f-692a79e3d767.webm)
