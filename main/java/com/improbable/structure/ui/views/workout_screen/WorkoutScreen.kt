@@ -29,6 +29,8 @@ import com.improbable.structure.ui.reusables.SaveButton
 import com.improbable.structure.ui.reusables.TopSection
 import com.improbable.structure.ui.views.navigation.NavigationDestination
 import com.improbable.structure.viewmodel.ViewModelProvider
+import kotlinx.coroutines.Deferred
+import kotlin.reflect.KSuspendFunction2
 
 /**
  * Destination route for WorkoutScreen.
@@ -145,9 +147,7 @@ fun JournalEntry(
                         WorkoutScreenConstants.standardPadding, 0.dp
                     )
                     .clickable {
-                        if (!isExpanded) {
-                            viewModel.getMovementHistory(movement)
-                        }; isExpanded = isExpanded.not()
+                         isExpanded = isExpanded.not()
                     }
                 )
             LazyRow(
@@ -167,14 +167,11 @@ fun JournalEntry(
             if (isExpanded) {
                 height = WorkoutScreenConstants.movementPortHeight * 2
 
-                when (val userData = state.userDataHistory) {
-                    UserDataHistoryState.Loading -> Text("Loading..")
-                    is UserDataHistoryState.Success -> AllMovementHistory(
-                        userData = userData.movementsUserData,
-                        moreData = viewModel::getMovementHistory,
-                        movement = movement
+                AllMovementHistory(
+                    moreData = viewModel::getMovementHistoryAsync,
+                    movement = movement
                     )
-                }
+
             } else {
                 height = WorkoutScreenConstants.movementPortHeight
             }
@@ -250,37 +247,58 @@ fun WeightAndRepsTextInput(
  * */
 @Composable
 fun AllMovementHistory(
-    userData: List<List<MovementUserData>>,
-    moreData: (Movement, Int) -> Unit,
+    moreData: KSuspendFunction2<Movement, Int, Deferred<UserDataHistoryState>>,
     movement: Movement
 ) {
+
     var numberOfSessions by remember {
         mutableStateOf(1)
     }
-    if (userData.isEmpty() || userData.first().isEmpty()) {
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            Spacer(modifier = Modifier.height(50.dp))
-            Text(stringResource(id = R.string.empty_movement_history), textAlign = TextAlign.Center)
-        }
-    } else {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            item {
-                MovementHistoryRow(userDataForOneSession = userData.first(), true)
-            }
-            items(userData.slice(1 until userData.size)) {
-                MovementHistoryRow(userDataForOneSession = it, false)
-            }
-            item {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth(),) {
+
+    var userDataHistoryRequest: UserDataHistoryState by remember {
+        mutableStateOf(UserDataHistoryState.Loading)
+    }
+
+    LaunchedEffect(numberOfSessions) {
+         userDataHistoryRequest = moreData(movement, numberOfSessions).await()
+    }
+
+
+    when (val userDataHistory = userDataHistoryRequest) {
+        UserDataHistoryState.Loading -> Text("Loading")
+        is UserDataHistoryState.Success ->
+
+            if (userDataHistory.movementsUserData.isEmpty() || userDataHistory.movementsUserData.first().isEmpty()) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     Spacer(modifier = Modifier.height(50.dp))
-                        Text("more", modifier = Modifier.clickable  {
-                            numberOfSessions += 1; moreData(movement, numberOfSessions)
-                        }
+                    Text(
+                        stringResource(id = R.string.empty_movement_history),
+                        textAlign = TextAlign.Center
                     )
+                }
+            } else {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    item {
+                        MovementHistoryRow(userDataForOneSession = userDataHistory.movementsUserData.first(), true)
+                    }
+                    items(userDataHistory.movementsUserData.slice(1 until userDataHistory.movementsUserData.size)) {
+                        MovementHistoryRow(userDataForOneSession = it, false)
+                    }
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Spacer(modifier = Modifier.height(50.dp))
+                            Text("more", modifier = Modifier.clickable {
+                                numberOfSessions += 1;
+                            }
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
 }
 
 /**

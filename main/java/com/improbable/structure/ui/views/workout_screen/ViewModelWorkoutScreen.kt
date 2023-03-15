@@ -38,7 +38,6 @@ sealed interface UserDataHistoryState {
 data class WorkoutScreenState(
     val movementsState : MovementsState = MovementsState.Loading,
     var userDataMap: MutableMap<Movement, SnapshotStateList<MovementUserData>> = mutableMapOf(),
-    var userDataHistory: UserDataHistoryState = UserDataHistoryState.Loading
 )
 
 const val ViewModelWorkoutScreenTAG = "ViewModelWorkoutScreen"
@@ -142,31 +141,31 @@ class ViewModelWorkoutScreen(
 
     /**
      * Retrieves the MovementUserData history for a given Movement from the Database.
-     * This data is stored in the UserDataHistoryState object in the WorkoutScreenState instance.
-     * @return Unit
+     * This data is returned as deferred UserDataHistoryState instance.
+     * @return Deferred<UserDataHistoryState>
      * */
-    fun getMovementHistory(movement: Movement, numberOfSessions: Int = 1) {
-        _workoutScreenState.value.userDataHistory = UserDataHistoryState.Loading
-        runBlocking {
-            val result = CoroutineScope(Dispatchers.IO).async {
+    suspend fun getMovementHistoryAsync(movement: Movement, numberOfSessions: Int = 1): Deferred<UserDataHistoryState> {
+            return CoroutineScope(Dispatchers.IO).async {
+
                 repository.getMovementUserDataForGiven(
-                    movement.id ?: error("No Movement Id available"),
-                    numberOfSessions
+                    movementId = movement.id ?: error("No Movement Id available"),
+                    numberOfWorkouts = numberOfSessions
                 )
                     .map {
                         val timestamp = it.created
                         val date = timestamp?.let { stamp -> Date(stamp) }
                         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                        it.copy(dateString = date?.let { it1 -> dateFormat.format(it1)
+                        it.copy(dateString = date?.let { it1 ->
+                            dateFormat.format(it1)
                         }
+                    )
+                }
+                    .let {
+                        UserDataHistoryState.Success(
+                            it.groupListsInList { data -> getComparableValueOfMovementUserData(data) }
+                            .toMutableStateList()
                         )
                     }
-                }
-            _workoutScreenState.value = _workoutScreenState.value.copy(
-                userDataHistory = UserDataHistoryState.Success(
-                    result.await()
-                        .groupListsInList { data -> getComparableValueOfMovementUserData(data) }
-                        .toMutableStateList()))
             }
     }
 
